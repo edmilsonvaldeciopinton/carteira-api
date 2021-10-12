@@ -41,5 +41,4 @@ public class UsuarioController {
 		return ResponseEntity.created(uri).body(usuarioDto);
 
 	}
-
 }
