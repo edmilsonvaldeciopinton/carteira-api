@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import br.com.alura.carteira.dto.UsuarioDto;
 import br.com.alura.carteira.dto.UsuarioFormDto;
+import br.com.alura.carteira.modelo.Perfil;
 import br.com.alura.carteira.modelo.Usuario;
+import br.com.alura.carteira.repository.PerfilRepository;
 import br.com.alura.carteira.repository.UsuarioRepository;
 
 @Service
@@ -21,6 +23,9 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private PerfilRepository perfilRepository;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -36,6 +41,9 @@ public class UsuarioService {
 	@Transactional
 	public UsuarioDto cadastrar(UsuarioFormDto dto) {
 		Usuario usuario = modelMapper.map(dto, Usuario.class);
+
+		Perfil perfil = perfilRepository.getById(dto.getPerfilId());
+		usuario.adicionarPerfil(perfil);
 
 		String senha = new Random().nextInt(999999) + "";
 		usuario.setSenha(bCryptPasswordEncoder.encode(senha));
