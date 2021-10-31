@@ -27,6 +27,7 @@ import br.com.alura.carteira.dto.TransacaoDto;
 import br.com.alura.carteira.dto.TransacaoFormDto;
 import br.com.alura.carteira.modelo.Usuario;
 import br.com.alura.carteira.service.TransacaoService;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/transacoes")
@@ -37,13 +38,13 @@ public class TransacaoController {
 
 	@GetMapping
 	public Page<TransacaoDto> listar(@PageableDefault(size = 10) Pageable paginacao,
-			@AuthenticationPrincipal Usuario logado) {
+			@ApiIgnore @AuthenticationPrincipal Usuario logado) {
 		return service.listar(paginacao, logado);
 	}
 
 	@PostMapping
 	public ResponseEntity<TransacaoDto> cadastrar(@RequestBody @Valid TransacaoFormDto dto,
-			UriComponentsBuilder uriBuilder, @AuthenticationPrincipal Usuario logado) {
+			UriComponentsBuilder uriBuilder, @ApiIgnore @AuthenticationPrincipal Usuario logado) {
 		TransacaoDto transacaoDto = service.cadastrar(dto, logado);
 
 		URI uri = uriBuilder.path("/transacoes/{id}").buildAndExpand(transacaoDto.getId()).toUri();
@@ -52,7 +53,7 @@ public class TransacaoController {
 
 	@PutMapping
 	public ResponseEntity<TransacaoDto> atualizar(@RequestBody @Valid AtualizacaoTransacaoFormDto dto,
-			@AuthenticationPrincipal Usuario logado) {
+			@ApiIgnore @AuthenticationPrincipal Usuario logado) {
 		TransacaoDto atualizada = service.atualizar(dto, logado);
 
 		return ResponseEntity.ok(atualizada);
@@ -60,7 +61,7 @@ public class TransacaoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<TransacaoDto> remover(@PathVariable @RequestBody @NotNull Long id,
-			@AuthenticationPrincipal Usuario logado) {
+			@ApiIgnore @AuthenticationPrincipal Usuario logado) {
 		service.remover(id, logado);
 
 		return ResponseEntity.noContent().build();
@@ -68,7 +69,7 @@ public class TransacaoController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<TransacaoDetalhadaDto> detalhar(@PathVariable @RequestBody @NotNull Long id,
-			@AuthenticationPrincipal Usuario logado) {
+			@ApiIgnore @AuthenticationPrincipal Usuario logado) {
 		TransacaoDetalhadaDto dto = service.detalhar(id, logado);
 
 		return ResponseEntity.ok(dto);
