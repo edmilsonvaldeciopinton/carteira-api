@@ -32,8 +32,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 	@Override
 	@Bean
-	protected AuthenticationManager authenticationManager() throws Exception {
-		return super.authenticationManager();
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 	@Override
@@ -45,15 +45,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
-		.authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/auth").permitAll()
-		.antMatchers("/usuarios/**").hasRole("ADMIN")		
-		.anyRequest().authenticated()
-		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().csrf().disable()
-				.addFilterBefore(
-						new VerificacaoTokenFilter(tokenService, usuarioRepository),
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/auth").permitAll().antMatchers(HttpMethod.GET, "/home")
+				.permitAll().antMatchers("/usuarios/**").hasRole("ADMIN").anyRequest().authenticated().and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().csrf().disable()
+				.addFilterBefore(new VerificacaoTokenFilter(tokenService, usuarioRepository),
 						UsernamePasswordAuthenticationFilter.class);
 	}
 
