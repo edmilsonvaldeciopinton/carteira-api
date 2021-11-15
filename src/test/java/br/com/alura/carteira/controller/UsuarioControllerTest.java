@@ -66,7 +66,7 @@ class UsuarioControllerTest {
 
 	@Test
 	void deveriaCadastrarUsuarioComDadosCompletos() throws Exception {
-		String json = "{\"nome\":\"fulano\",\"login\":\"fulano@email.com\", \"perfilId\":1}";
+		String json = "{\"nome\":\"fulano\",\"login\":\"fulano@email.com\", \"perfilId\":1,\"email\":\"fulano@email.com\"}";
 
 		mvc.perform(post("/usuarios").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization",
 				"Bearer " + token)).andExpect(status().isCreated());
